@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id String @id
+
+  name String?
+  email String?
+  image String?
+  description String?
+  banner String?
+  banned Boolean? @default(false)
+  banReason String?
+  banExpiry DateTime?
+  chatStatus String?
+  pushToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  conversations ConversationParticipant[]
+  messages Message[] @relation("MessageSender")
+  Views Views []
+  Intrest UserInterest []
+  Comment Comment []
+}
+
+model Post {
+  id String @id @default(uuid())
+  createdBy String
+  createdAt DateTime @default(now())
+
+  title String
+  description String
+
+  Likes Like []
+  Media Media []
+  Views Views []
+  Tags PostTags []
+  Comment Comment []
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model Media {
+  mediaId String @id @default(uuid())
+
+  postId String
+  MediaUrl String
+  MediaType MediaType
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  likeId String @id @default(uuid())
+  givenBy String
+  givenAt DateTime @default(now())
+  postId String
+
+  @@unique([givenBy, postId])
+  @@index([postId])
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Conversation {
+  id String @id @default(cuid())
+
+  dmKey String? @unique
+
+  Messages Message []
+  participants ConversationParticipant []
+}
+
+model Message {
+  id String @id @default(cuid())
+  text String?
+  senderId String
+  conversationId String
+  attachmentUrl String?
+  attachmentType String?
+
+  startedAt DateTime @default(now())
+
+  Conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user User @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model ConversationParticipant {
+  id String @id @default(cuid())
+
+  userId String
+  conversationId String
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conversationId])
+}
+
+model Views {
+  id String @id @default(cuid())
+  userId String
+  postId String
+  watchTime Int
+  createdAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model PostTags {
+  id String @id @default(cuid())
+  postId String
+  tag String
+
+  Post Post @relation(fields: [postId], references: [id])
+}
+
+model UserInterest {
+  id     String @id @default(cuid())
+  userId String
+  tag    String
+  score  Float @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tag])
+}
+
+model Comment {
+  id String @id @default(cuid())
+  userId String
+  PostId String
+  text String
+
+  Sent DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [PostId], references: [id], onDelete: Cascade)
+}
