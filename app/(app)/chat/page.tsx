@@ -7,9 +7,10 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth/server'
 import { MessageCircleIcon } from 'lucide-react'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { redirectChat } from '../actions/chatRedirection'
+import { CreateChat } from '../actions/chatRedirection'
 import DeleteConvo from '@/components/deleteConvo'
 import StatusBadge from '@/components/StatusBadge'
+import Link from 'next/link'
 
 const ChatList = async () => {
   const { data: session } = await auth.getSession();
@@ -65,8 +66,7 @@ const ChatList = async () => {
             <div className='w-full flex justify-end'>
               <DeleteConvo conversationId={conversation.id} />
             </div>
-            <form key={conversation.id} action={redirectChat.bind(null, otherUser?.id ?? "Unknown")} className='w-full'>
-              <button type='submit' className='w-full cursor-pointer'>
+              <Link href={`/chat/${conversation.id}`} className='w-full'>
                 <Card key={conversation.id} className='flex flex-row mb-5'>
                   <img src={otherUser.image || "/New-User.jpg"} alt='User Icon' className='max-h-30 max-w-30 rounded-full' />
                   <div className='flex flex-col justify-between'>
@@ -75,8 +75,7 @@ const ChatList = async () => {
                     <StatusBadge conversationId={conversation.id} otherUserId={otherUser.id} />
                   </div>
                 </Card>
-              </button>
-            </form>
+              </Link>
           </div>
         )
       })}

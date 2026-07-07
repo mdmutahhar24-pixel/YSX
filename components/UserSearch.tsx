@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { redirectChat } from "@/app/(app)/actions/chatRedirection";
+import { CreateChat } from "@/app/(app)/actions/chatRedirection";
 
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -37,7 +37,7 @@ export default function UserSearch({ users }: Props) {
 
     async function openChat(userId: string) {
         startTransition(async () => {
-            const conversationId = await redirectChat(userId);
+            const conversationId = await CreateChat(userId);
 
             router.push(`/chat/${conversationId}`);
         });

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 
-export async function redirectChat(otherUserId: string) {
+export async function CreateChat(otherUserId: string) {
     const { data: session } = await auth.getSession();
 
     if (!session?.user) {
