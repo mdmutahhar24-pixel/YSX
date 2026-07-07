@@ -6,8 +6,6 @@ import { prisma } from '@/lib/prisma'
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from './ui/combobox'
 import { auth } from '@/lib/auth/server'
 import UserSearch from './UserSearch'
-import { redirectChat } from '@/app/(app)/actions/chatRedirection'
-import RedirectConvo from './RedirectConvo'
 
 const CreateConvo = async () => {
     const { data: session } = await auth.getSession();
