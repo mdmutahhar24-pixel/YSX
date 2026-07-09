@@ -15,4 +15,7 @@ It was a fun little project that tested my skills as a programmer, so I decided 
 ## Will there be future updates to this?
 Depends.
 
+## Security Requirements for account password:
+- Needs to have: a capital letter, a number, a special character, lowercase letters
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
