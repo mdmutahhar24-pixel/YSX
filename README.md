@@ -30,6 +30,6 @@ YSX includes many features such as:
 - fully mobile compatible
 
 ## Security Requirements for account password:
-- Needs to have: a capital letter, a number, a special character, lowercase letters
+- Needs to have: a capital letter, a number, a special character, lowercase letters, at least 11 characters
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
